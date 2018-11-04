@@ -9,6 +9,10 @@
 #include <cstdlib>
 #include <vector>
 
+//eigen
+#include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Geometry>
+
 //consts
 const unsigned int MIN_NUM_FEATURES = 300; //minimum number of point fetaures
 
@@ -63,7 +67,21 @@ int main(int argc, char *argv[])
         point_set.clear();
 
         //detect and compute(extract) features
-        orb_detector->detectAndCompute(image, cv::noArray(), point_set, descriptor_set);
+
+        //detecció amb màscara per agafar només una regió d'interès "roi" (posar valors diferents de 0)
+        // CV_8UC1 ha de ser 1 channel, no funciona amb 3 channel CV_8UC3
+        cv::Mat mask = cv::Mat::zeros(image.size(), CV_8UC1);  //NOTE: using the type explicitly
+
+        //amb aquest tipus de definició de matriu, es defineixen punters, de manera que el modificar "roi"
+        //   també es modifica l'original "mask"
+        //   cv::Rect(x,y,widht, height) --> punt x,y del cantó  del rectangle i amplada i alçada
+        cv::Mat roi(mask, cv::Rect(10,10,200,200));
+        roi = cv::Scalar(255, 255, 255);
+
+        orb_detector->detectAndCompute(image, mask, point_set, descriptor_set);
+
+        //detecció sense màscara per agafar tota la imatge
+        //orb_detector->detectAndCompute(image, cv::noArray(), point_set, descriptor_set);
 
         //draw points on the image
         cv::drawKeypoints( image, point_set, image, 255, cv::DrawMatchesFlags::DEFAULT );
@@ -75,5 +93,5 @@ int main(int argc, char *argv[])
 
 		//Waits 30 millisecond to check if 'q' key has been pressed. If so, breaks the loop. Otherwise continues.
     	if( (unsigned char)(cv::waitKey(30) & 0xff) == 'q' ) break;
-    }   
+    }
 }
