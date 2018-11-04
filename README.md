@@ -13,6 +13,7 @@ A partir del conjunt de punts clau de Stheta correctes, es calcula la seva carac
 A més, l'algoritme ORB fa una recerca de les proves binàries que tenen més variació, una mitjana al voltant de 0.5 i no són correlatives. Això és perquè amb més variació hi ha més discriminació i, per tant, més diferència en la resposta a les entrades. També, si no són correlatives, cada prova contribuirà en el resultat final de forma més notòria.
 
 Referències:
+
 https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_orb/py_orb.html
 
 https://stackoverflow.com/questions/38767703/orb-feature-descriptor-official-paper-explanation
